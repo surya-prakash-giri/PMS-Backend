@@ -24,6 +24,17 @@ clinicalRouter.post('/', async (req, res) => {
     res.status(201).send({message: 'A new Patient Added!', newPatient});
 });
 
+clinicalRouter.delete('/:id', async (req, res) => {
+    const patientId = req.params.id;
+    const patient = await Patient.findById(patientId);
+    let deletedItem;
+    if (patient) {
+        deletedItem = await Patient.findByIdAndRemove(patientId);
+        console.log('Deleted Patient: ', deletedItem);
+    }
+    res.status(200).send({message: 'Patient deleted!', deletedItem});
+});
+
 clinicalRouter.post('/AddData', async (req, res) => {
     const data: PatientAdditionData = req.body;
     const {patientId, componentName, componentValue} = data
